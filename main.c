@@ -1,5 +1,6 @@
-#include "raylib.h"
+#include <raylib.h>
 #include "jimmy.h"
+#include "utils/CollisionsHandler.h"
 
 int main() {
     const int screenSize = 512;
@@ -9,7 +10,7 @@ int main() {
 
     bool blink = true;
     Texture mogus = LoadTexture("sus2.png");
-    Texture map = LoadTexture("map.png");
+    Texture map = LoadTexture("assets/map.png");
     Vector2 moguspos = {256,256};
     Vector2 mappos = {0,0};
     Vector2 mousepos;
@@ -74,6 +75,7 @@ int main() {
         BeginMode2D(camera);
         DrawRectangle(16, 16, 16, 16, blink ? RED:BLUE);
         DrawFPS(10,10);
+        DrawCollisionsGrid();
         DrawTextureRec(mogus,playerhitbox,moguspos,WHITE);
         DrawTextureV(map,mappos,WHITE);
         EndMode2D();
