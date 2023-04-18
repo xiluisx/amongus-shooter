@@ -50,3 +50,12 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+output/
+main.code-workspace
+main.exe
+resources/
+
+*
+!/**/
+!*.*
