@@ -60,3 +60,4 @@ resources/
 !/**/
 !*.*
 *.code-workspace
+Makefile.Android
