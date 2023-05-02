@@ -8,24 +8,33 @@ typedef struct {
 	Vector2 acceleration;
 	Vector2 prevPos;
 	Rectangle rect;
+	Sprite sprite;
 } Player;
 
 void CheckPlayerCollisions(Player* player, MapHandler mapHandler) {
 	for(int i = 0; i < mapHandler.objectCount; i++) {
-		printf("%f, %f - %f, %f\n", player->pos.x, player->pos.y, mapHandler.objects[i].rect.height, mapHandler.objects[i].rect.width);
 		if(CheckCollisionRecs(player->rect, mapHandler.objects[i].rect)) {
-			printf("Colision");
 			player->pos = player->prevPos;
 		}
 	}
 }
 
 void UpdatePlayer(Player* player, MapHandler mapHandler) {
+	if(player->acceleration.x == 0 && player->acceleration.y == 0) {
+		player->sprite.curStep = 0;
+	}
+	if(player->acceleration.x != 0 || player->acceleration.y != 0) {
+		player->sprite.curStep++;
+		if(player->sprite.curStep >= 4) {
+			player->sprite.curStep = 0;
+		}
+	}
 	player->prevPos = player->pos;
 	player->pos = Vector2Add(player->pos, player->acceleration);
 	player->rect.x = player->pos.x;
 	player->rect.y = player->pos.y;
 	CheckPlayerCollisions(player, mapHandler);
+	UpdateSprite(&player->sprite);
 }
 
 

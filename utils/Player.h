@@ -6,6 +6,7 @@ typedef struct {
 	Vector2 acceleration;
 	Vector2 prevPos;
 	Rectangle rect;
+	Sprite sprite;
 } Player;
 
 void CheckPlayerCollisions(Player* player, MapHandler mapHandler);

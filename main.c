@@ -24,11 +24,12 @@ int main() {
 		.rect = {255, 240, 80, 16}
 	};
 	AddMapObject(&mapHandler, paredObj);
-
+	
 	Player player = {
 		.pos = {256, 256},
 		.acceleration = {0, 0},
-		.rect = {256, 256, 16, 16}
+		.rect = {256, 256, 16, 16},
+		.sprite = CreateSprite("assets/img/player/sussprites.png", 16)
 	};
     Vector2 mappos = {0,0};
     Rectangle gunrect = {8,8,8,8};
@@ -42,11 +43,11 @@ int main() {
         blink = !blink;
 
         if (mouseWorldPos.x<player.pos.x+8){
-            playerhitbox.width = -16;
+            player.sprite.mask.width = -16;
             gunrect.width = -16;
             }
         if (mouseWorldPos.x>player.pos.x+8){
-            playerhitbox.width = 16;
+            player.sprite.mask.width = 16;
             gunrect.width = 16;
         }
 
@@ -111,7 +112,7 @@ int main() {
         DrawTextureEx(gun, gunPos, 0, 1, WHITE);
         DrawRectangle(16, 16, 16, 16, blink ? RED:BLUE);
         DrawCollisionsGrid();
-        DrawTextureRec(mogus,playerhitbox,player.pos,WHITE);
+        DrawTextureRec(player.sprite.texture,player.sprite.mask,player.pos,WHITE);
 		DrawTexture(paredObj.texture, 255, 240, WHITE);
         DrawTextureV(map,mappos,WHITE);
         EndMode2D();

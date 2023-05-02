@@ -8,3 +8,5 @@ typedef struct {
 } MapHandler;
 
 void AddMapObject(MapHandler* mapHandler, MapObject object);
+
+void RenderMapObject(MapHandler* mapHandler);
