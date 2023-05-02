@@ -2,7 +2,6 @@
 #include <raymath.h>
 #include <stdio.h>
 #include <math.h>
-#include "jimmy.h"
 #include "utils/CollisionsHandler.h"
 #include "utils/Player.h"
 #include "utils/MapHandler.h"
@@ -12,13 +11,11 @@ int main() {
 	const int screenY = 600;
     InitWindow(screenX, screenY, "Amogus Shooter");
     SetTargetFPS(30);
-    TraceLog(foo,"HOLA MUNDO, Esto es un error");
 
-    bool blink = true;
 	MapHandler mapHandler;
-    Texture mogus = LoadTexture("sus2.png");
     Texture map = LoadTexture("assets/map.png");
     Texture gun = LoadTexture("assets/img/player/Gun.png");
+
 	MapObject paredObj = {
 		.texture = LoadTexture("assets/img/Pared.png"),
 		.rect = {255, 240, 80, 16}
@@ -39,8 +36,6 @@ int main() {
     while (!WindowShouldClose())
     {
         Vector2 mouseWorldPos = GetScreenToWorld2D(GetMousePosition(), camera);
-
-        blink = !blink;
 
         if (mouseWorldPos.x<player.pos.x+8){
             player.sprite.mask.width = -16;
@@ -76,19 +71,6 @@ int main() {
 
 		UpdatePlayer(&player, mapHandler);
 
-		Rectangle paredRect = {
-			.height = 16,
-			.width = 80,
-			.x = 255,
-			.y = 240
-		};
-	
-		/*
-		if(CheckCollisionRecs(player.rect, paredObj.rect)){
-			player.pos = player.prevPos;
-		}*/
-		
-		
 		Vector2 origin = {
             .x = 8,
             .y = 8
@@ -105,12 +87,11 @@ int main() {
 
         BeginDrawing();
         ClearBackground(WHITE);
-        camera.target = (Vector2){ player.pos.x + 16 / 2, player.pos.y + playerhitbox.height / 2 };
+        camera.target = (Vector2){ player.pos.x + 16.0 / 2, player.pos.y + playerhitbox.height / 2 };
         BeginMode2D(camera);
         
 
         DrawTextureEx(gun, gunPos, 0, 1, WHITE);
-        DrawRectangle(16, 16, 16, 16, blink ? RED:BLUE);
         DrawCollisionsGrid();
         DrawTextureRec(player.sprite.texture,player.sprite.mask,player.pos,WHITE);
 		DrawTexture(paredObj.texture, 255, 240, WHITE);
