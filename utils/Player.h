@@ -6,6 +6,7 @@ typedef struct {
 	Vector2 acceleration;
 	Vector2 prevPos;
 	Rectangle rect;
+	int animationCount;
 	Sprite sprite;
 } Player;
 

@@ -8,6 +8,7 @@ typedef struct {
 	Vector2 acceleration;
 	Vector2 prevPos;
 	Rectangle rect;
+	int animationCount;
 	Sprite sprite;
 } Player;
 
@@ -24,7 +25,11 @@ void UpdatePlayer(Player* player, MapHandler mapHandler) {
 		player->sprite.curStep = 0;
 	}
 	if(player->acceleration.x != 0 || player->acceleration.y != 0) {
-		player->sprite.curStep++;
+		player->animationCount++;
+		if(player->animationCount % 4 == 0) {
+			player->sprite.curStep++;
+			player->animationCount = 0;
+		}
 		if(player->sprite.curStep >= 4) {
 			player->sprite.curStep = 0;
 		}
