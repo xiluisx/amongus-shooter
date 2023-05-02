@@ -5,9 +5,9 @@
 #include "jimmy.h"
 #include "utils/CollisionsHandler.h"
 #include "utils/Player.h"
+#include "utils/MapHandler.h"
 
 int main() {
-    const int screenSize = 512;
 	const int screenX = 1024;
 	const int screenY = 720;
     InitWindow(screenX, screenY, "Amogus Shooter");
@@ -15,28 +15,31 @@ int main() {
     TraceLog(foo,"HOLA MUNDO, Esto es un error");
 
     bool blink = true;
+	MapHandler mapHandler;
     Texture mogus = LoadTexture("sus2.png");
     Texture map = LoadTexture("assets/map.png");
     Texture gun = LoadTexture("assets/img/player/Gun.png");
-	Texture pared = LoadTexture("assets/img/Pared.png");
-    Vector2 moguspos = {256,256};
+	MapObject paredObj = {
+		.texture = LoadTexture("assets/img/Pared.png"),
+		.rect = {255, 240, 80, 16}
+	};
+	AddMapObject(&mapHandler, paredObj);
+
 	Player player = {
 		.pos = {256, 256},
-		.acceleration = {0, 0}
+		.acceleration = {0, 0},
+		.rect = {256, 256, 16, 16}
 	};
     Vector2 mappos = {0,0};
-    Vector2 mousepos;
     Rectangle gunrect = {8,8,8,8};
     Rectangle playerhitbox = {16,16,16,16};
-    Camera2D camera = { {screenX/2,screenY/2}, { screenX/2.0f, screenY/2.0f }, 0.0f, 7.0f };
+    Camera2D camera = { {screenX/2.0,screenY/2.0}, { screenX/2.0f, screenY/2.0f }, 0.0f, 7.0f };
 
     while (!WindowShouldClose())
     {
         Vector2 mouseWorldPos = GetScreenToWorld2D(GetMousePosition(), camera);
 
         blink = !blink;
-        int mogusDs = 2;
-        int mogusNs = 3;
 
         if (mouseWorldPos.x<player.pos.x+8){
             playerhitbox.width = -16;
@@ -65,24 +68,24 @@ int main() {
 			}
         }
 
-		Vector2 prevPos = player.pos;
-		player.pos = Vector2Add(player.pos, player.acceleration);
+		if(player.acceleration.x != 0 && player.acceleration.y != 0) {
+			player.acceleration.x /= 1.5;
+			player.acceleration.y /= 1.5;
+		}
 
-		Rectangle amogusRect = {
-			.height = 16,
-			.width = 16,
-			.x = player.pos.x,
-			.y = player.pos.y
-		};
+		UpdatePlayer(&player, mapHandler);
+
 		Rectangle paredRect = {
 			.height = 16,
 			.width = 80,
 			.x = 255,
 			.y = 240
 		};
-		if(CheckCollisionRecs(amogusRect, paredRect)){
-			player.pos = prevPos;
-		}
+	
+		/*
+		if(CheckCollisionRecs(player.rect, paredObj.rect)){
+			player.pos = player.prevPos;
+		}*/
 		
 		
 		Vector2 origin = {
@@ -109,7 +112,7 @@ int main() {
         DrawRectangle(16, 16, 16, 16, blink ? RED:BLUE);
         DrawCollisionsGrid();
         DrawTextureRec(mogus,playerhitbox,player.pos,WHITE);
-		DrawTexture(pared, 255, 240, WHITE);
+		DrawTexture(paredObj.texture, 255, 240, WHITE);
         DrawTextureV(map,mappos,WHITE);
         EndMode2D();
         DrawFPS(10,10);
