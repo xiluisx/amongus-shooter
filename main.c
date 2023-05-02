@@ -8,8 +8,8 @@
 #include "utils/MapHandler.h"
 
 int main() {
-	const int screenX = 1024;
-	const int screenY = 720;
+	const int screenX = 800;
+	const int screenY = 600;
     InitWindow(screenX, screenY, "Amogus Shooter");
     SetTargetFPS(30);
     TraceLog(foo,"HOLA MUNDO, Esto es un error");
