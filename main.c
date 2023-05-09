@@ -3,8 +3,8 @@
 #include <stdio.h>
 #include <math.h>
 #include "utils/CollisionsHandler.h"
-#include "utils/Player.h"
 #include "utils/MapHandler.h"
+#include "utils/GameHandler.h"
 
 int main() {
 	const int screenX = 800;
@@ -13,6 +13,7 @@ int main() {
     SetTargetFPS(30);
 
 	MapHandler mapHandler;
+	
     Texture map = LoadTexture("assets/map.png");
     Texture gun = LoadTexture("assets/img/player/Gun.png");
 
@@ -28,6 +29,17 @@ int main() {
 		.rect = {256, 256, 16, 16},
 		.sprite = CreateSprite("assets/img/player/sussprites.png", 16)
 	};
+
+	Sprite bullet = CreateSprite("assets/img/Bullet.png", 8);
+
+	GameHandler game = {
+		.curRound = 1,
+		.enemiesCount = 0,
+		.player	= &player
+	};
+
+	HandleNewRound(&game);
+
     Vector2 mappos = {0,0};
     Rectangle gunrect = {8,8,8,8};
     Rectangle playerhitbox = {16,16,16,16};
@@ -70,12 +82,17 @@ int main() {
 		}
 
 		UpdatePlayer(&player, mapHandler);
+		for(int i = 0; i < game.enemiesCount; i++) {
+			UpdateEnemy(&game.enemies[i], &game);
+		}
 
 		Vector2 origin = {
             .x = 8,
             .y = 8
         };
         double angleToMouse = Vector2Angle(Vector2Add(player.pos, origin), mouseWorldPos);
+		Vector2 shootingPos = {cos(angleToMouse), sin(angleToMouse)};
+
         float xPos = 20 * cos(angleToMouse);
         float yPos = 20 * sin(angleToMouse);
         Vector2 gunPos = {
@@ -94,6 +111,7 @@ int main() {
         DrawTextureEx(gun, gunPos, 0, 1, WHITE);
         DrawCollisionsGrid();
         DrawTextureRec(player.sprite.texture,player.sprite.mask,player.pos,WHITE);
+		DrawEnemies(&game);
 		DrawTexture(paredObj.texture, 255, 240, WHITE);
         DrawTextureV(map,mappos,WHITE);
         EndMode2D();

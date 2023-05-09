@@ -13,6 +13,7 @@ Sprite CreateSprite(char *path, int stepSize) {
 	newSprite.stepSize = stepSize;
 	Rectangle mask = {0, 0, stepSize, newSprite.texture.height};
 	newSprite.mask = mask;
+	newSprite.curStep = 0;
 	return newSprite;
 }
 
