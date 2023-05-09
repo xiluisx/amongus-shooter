@@ -61,3 +61,5 @@ resources/
 !*.*
 *.code-workspace
 Makefile.Android
+.idea/
+cmake-build-debug/
