@@ -6,13 +6,16 @@
 #include "utils/MapHandler.h"
 #include "utils/GameHandler.h"
 
+typedef enum GameScreen { LOGO = 0, TITLE, GAMEPLAY, ENDING } GameScreen;
+
 int main() {
+
 	const int screenX = 800;
 	const int screenY = 600;
     InitWindow(screenX, screenY, "Amogus Shooter");
     SetTargetFPS(30);
 
-	MapHandler mapHandler;
+	MapHandler mapHandler = {0};
 	
     Texture map = LoadTexture("assets/map.png");
     Texture gun = LoadTexture("assets/img/player/Gun.png");
@@ -45,9 +48,45 @@ int main() {
     Rectangle playerhitbox = {16,16,16,16};
     Camera2D camera = { {screenX/2.0,screenY/2.0}, { screenX/2.0f, screenY/2.0f }, 0.0f, 7.0f };
 
+    GameScreen currentScreen = LOGO;
+    InitAudioDevice();
+    Music pvzsong = LoadMusicStream("assets/sound/pvz-amongus.mp3");
+    int framesCounter = 0;
+    Rectangle bgrec = {80,45,80,45};
+    Rectangle menungusrec = {80,45,80,45};
+    Texture menungus = LoadTexture("assets/img/menungus.png");
+    Texture menubg = LoadTexture("assets/img/menubg.png");
+    Camera2D camera2 = {{0,0},{0,0}, 0.0f, 10.7f };
+
     while (!WindowShouldClose())
     {
         Vector2 mouseWorldPos = GetScreenToWorld2D(GetMousePosition(), camera);
+
+        switch(currentScreen){
+            case LOGO:{
+                framesCounter++;
+                if (framesCounter > 120){
+                    currentScreen = TITLE;
+                }
+            } break;
+            case TITLE:{
+                if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)){
+                    currentScreen = GAMEPLAY;
+
+                }
+            } break;
+            case GAMEPLAY:{
+                if (IsKeyPressed(KEY_ENTER) || IsGestureDetected(GESTURE_TAP)){
+                    currentScreen = ENDING;
+                }
+            } break;
+            case ENDING:{
+                if (IsKeyPressed(KEY_ENTER) || IsGestureDetected(GESTURE_TAP)){
+                    currentScreen = TITLE;
+                }
+            } break;
+            default: break;
+        }
 
         if (mouseWorldPos.x<player.pos.x+8){
             player.sprite.mask.width = -16;
@@ -101,21 +140,52 @@ int main() {
         };
 
 
-
         BeginDrawing();
         ClearBackground(WHITE);
-        camera.target = (Vector2){ player.pos.x + 16.0 / 2, player.pos.y + playerhitbox.height / 2 };
-        BeginMode2D(camera);
-        
 
-        DrawTextureEx(gun, gunPos, 0, 1, WHITE);
-        DrawCollisionsGrid();
-        DrawTextureRec(player.sprite.texture,player.sprite.mask,player.pos,WHITE);
-		DrawEnemies(&game);
-		DrawTexture(paredObj.texture, 255, 240, WHITE);
-        DrawTextureV(map,mappos,WHITE);
-        EndMode2D();
-        DrawFPS(10,10);
+        switch(currentScreen){
+            case LOGO:{
+                DrawText("LOGO SCREEN", 20, 20, 40, LIGHTGRAY);
+                DrawText("WAIT for 2 SECONDS...", 290, 220, 20, GRAY);
+            } break;
+            case TITLE:{
+                BeginMode2D(camera2);
+                UpdateMusicStream(pvzsong);
+                PlayMusicStream(pvzsong);
+                DrawTextureRec(menubg,bgrec,mappos,WHITE);
+                DrawTextureRec(menungus,menungusrec,mappos,WHITE);
+                bgrec.x -=0.5;
+                if (bgrec.x ==-80){
+                    bgrec.x = 0;
+                }
+
+                EndMode2D();
+
+            } break;
+            case GAMEPLAY:{
+                camera.target = (Vector2){ player.pos.x + 16.0 / 2, player.pos.y + playerhitbox.height / 2 };
+                BeginMode2D(camera);
+                DrawTextureEx(gun, gunPos, 0, 1, WHITE);
+                DrawCollisionsGrid();
+                DrawTextureRec(player.sprite.texture,player.sprite.mask,player.pos,WHITE);
+                DrawEnemies(&game);
+                DrawTexture(paredObj.texture, 255, 240, WHITE);
+                DrawTextureV(map,mappos,WHITE);
+                EndMode2D();
+                DrawFPS(10,10);
+
+            } break;
+            case ENDING:{
+
+                DrawRectangle(0, 0, screenX, screenY, BLUE);
+                DrawText("ENDING SCREEN", 20, 20, 40, DARKBLUE);
+                DrawText("PRESS ENTER or TAP to RETURN to TITLE SCREEN", 120, 220, 20, DARKBLUE);
+
+            } break;
+            default: break;
+        }
+
+
         EndDrawing();
     }
 }
