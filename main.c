@@ -25,13 +25,34 @@ int main() {
 		.rect = {255, 240, 80, 16}
 	};
 	AddMapObject(&mapHandler, paredObj);
-	
+    MapObject Bordesup = {
+            .texture = LoadTexture("assets/img/bordesup.png"),
+            .rect = {0, 0, 512, 16}
+    };
+    AddMapObject(&mapHandler, Bordesup);
+    MapObject Bordeizq = {
+            .texture = LoadTexture("assets/img/bordeizq.png"),
+            .rect = {0, 16, 16, 480}
+    };
+    AddMapObject(&mapHandler, Bordeizq);
+    MapObject Bordeinf = {
+            .texture = LoadTexture("assets/img/bordesup.png"),
+            .rect = {0, 496, 512, 16}
+    };
+    AddMapObject(&mapHandler, Bordeinf);
+    MapObject Borderecho = {
+            .texture = LoadTexture("assets/img/bordeizq.png"),
+            .rect = {496, 16, 16, 480}
+    };
+    AddMapObject(&mapHandler, Borderecho);
 	Player player = {
 		.pos = {256, 256},
 		.acceleration = {0, 0},
 		.rect = {256, 256, 16, 16},
 		.sprite = CreateSprite("assets/img/player/sussprites.png", 16)
 	};
+    Vector2 vorderecho = {496, 16};
+    Vector2 vordinf = {0, 496};
 
 	Sprite bullet = CreateSprite("assets/img/Bullet.png", 8);
 
@@ -170,7 +191,13 @@ int main() {
                 DrawTextureRec(player.sprite.texture,player.sprite.mask,player.pos,WHITE);
                 DrawEnemies(&game);
                 DrawTexture(paredObj.texture, 255, 240, WHITE);
+
                 DrawTextureV(map,mappos,WHITE);
+                DrawTexture(Bordesup.texture, 0, 0, WHITE);
+                DrawTexture(Bordeizq.texture, 0, 16, WHITE);
+                DrawTextureRec(Bordeinf.texture,Bordeinf.rect, vordinf, WHITE);
+                DrawTextureRec(Borderecho.texture,Borderecho.rect, vorderecho, WHITE);
+                Bordeinf.rect.height = -16;
                 EndMode2D();
                 DrawFPS(10,10);
 
