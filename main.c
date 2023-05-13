@@ -45,14 +45,101 @@ int main() {
             .rect = {496, 16, 16, 480}
     };
     AddMapObject(&mapHandler, Borderecho);
+    Vector2 vorderecho = {496, 16};
+    Vector2 vordinf = {0, 496};
+    Texture muroacero = LoadTexture("assets/img/murometal.png");
+    MapObject muro1 = {
+            .texture = muroacero,
+            .rect = {96, 64, 320, 16}
+    };
+    AddMapObject(&mapHandler, muro1);
+    MapObject muro2 = {
+            .texture = muroacero,
+            .rect = {96, 80, 16, 32}
+    };
+    AddMapObject(&mapHandler, muro2);
+    MapObject muro3 = {
+            .texture = muroacero,
+            .rect = {400, 80, 16, 32}
+    };
+    AddMapObject(&mapHandler, muro3);
+    MapObject muro4 = {
+            .texture = muroacero,
+            .rect = {96, 144, 16, 80}
+    };
+    AddMapObject(&mapHandler, muro4);
+    MapObject muro5 = {
+            .texture = muroacero,
+            .rect = {112, 208, 112, 16}
+    };
+    AddMapObject(&mapHandler, muro5);
+    MapObject muro6 = {
+            .texture = muroacero,
+            .rect = {288, 208, 112, 16}
+    };
+    AddMapObject(&mapHandler, muro6);
+    MapObject muro7 = {
+            .texture = muroacero,
+            .rect = {400, 144, 16, 80}
+    };
+    AddMapObject(&mapHandler, muro7);
+    MapObject muro8 = {
+            .texture = muroacero,
+            .rect = {160, 208, 16, 80}
+    };
+    AddMapObject(&mapHandler, muro8);
+    MapObject muro9 = {
+            .texture = muroacero,
+            .rect = {336, 208, 16, 80}
+    };
+    AddMapObject(&mapHandler, muro9);
+    MapObject muro10 = {
+            .texture = muroacero,
+            .rect = {160, 320, 16, 80}
+    };
+    AddMapObject(&mapHandler, muro10);
+    MapObject muro11 = {
+            .texture = muroacero,
+            .rect = {176, 384, 64, 16}
+    };
+    AddMapObject(&mapHandler, muro11);
+    MapObject muro12 = {
+            .texture = muroacero,
+            .rect = {272, 384, 64, 16}
+    };
+    AddMapObject(&mapHandler, muro12);
+    MapObject muro13 = {
+            .texture = muroacero,
+            .rect = {336, 320, 16, 80}
+    };
+    AddMapObject(&mapHandler, muro13);
+    MapObject muro14 = {
+            .texture = muroacero,
+            .rect = {16, 160, 80, 16}
+    };
+    AddMapObject(&mapHandler, muro14);
+    MapObject muro15 = {
+            .texture = muroacero,
+            .rect = {416, 160, 80, 16}
+    };
+    AddMapObject(&mapHandler, muro15);
+    MapObject muro16 = {
+            .texture = muroacero,
+            .rect = {16, 336, 144, 16}
+    };
+    AddMapObject(&mapHandler, muro16);
+    MapObject muro17 = {
+            .texture = muroacero,
+            .rect = {352, 336, 144, 16}
+    };
+    AddMapObject(&mapHandler, muro17);
+
 	Player player = {
 		.pos = {256, 256},
 		.acceleration = {0, 0},
 		.rect = {256, 256, 16, 16},
 		.sprite = CreateSprite("assets/img/player/sussprites.png", 16)
 	};
-    Vector2 vorderecho = {496, 16};
-    Vector2 vordinf = {0, 496};
 
 	Sprite bullet = CreateSprite("assets/img/Bullet.png", 8);
 
@@ -197,6 +284,8 @@ int main() {
                 DrawTexture(Bordeizq.texture, 0, 16, WHITE);
                 DrawTextureRec(Bordeinf.texture,Bordeinf.rect, vordinf, WHITE);
                 DrawTextureRec(Borderecho.texture,Borderecho.rect, vorderecho, WHITE);
+                /*DrawRectanglePro(Rectangle rec, Vector2 origin, float rotation, Color color)*/
+
                 Bordeinf.rect.height = -16;
                 EndMode2D();
                 DrawFPS(10,10);
