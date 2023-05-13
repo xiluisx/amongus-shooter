@@ -270,12 +270,12 @@ int main() {
                 EndMode2D();
 
             } break;
-            case GAMEPLAY:{
-                camera.target = (Vector2){ player.pos.x + 16.0 / 2, player.pos.y + playerhitbox.height / 2 };
+            case GAMEPLAY: {
+                camera.target = (Vector2) {player.pos.x + 16.0 / 2, player.pos.y + playerhitbox.height / 2};
                 BeginMode2D(camera);
                 DrawTextureEx(gun, gunPos, 0, 1, WHITE);
                 DrawCollisionsGrid();
-                DrawTextureRec(player.sprite.texture,player.sprite.mask,player.pos,WHITE);
+                DrawTextureRec(player.sprite.texture, player.sprite.mask, player.pos, WHITE);
                 DrawEnemies(&game);
                 DrawTexture(paredObj.texture, 255, 240, WHITE);
 
@@ -284,8 +284,6 @@ int main() {
                 DrawTexture(Bordeizq.texture, 0, 16, WHITE);
                 DrawTextureRec(Bordeinf.texture,Bordeinf.rect, vordinf, WHITE);
                 DrawTextureRec(Borderecho.texture,Borderecho.rect, vorderecho, WHITE);
-                /*DrawRectanglePro(Rectangle rec, Vector2 origin, float rotation, Color color)*/
-
                 Bordeinf.rect.height = -16;
                 EndMode2D();
                 DrawFPS(10,10);
