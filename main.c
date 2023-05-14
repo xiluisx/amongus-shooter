@@ -162,6 +162,7 @@ int main() {
     Texture menungus = LoadTexture("assets/img/menungus.png");
     Texture menubg = LoadTexture("assets/img/menubg.png");
     Camera2D camera2 = {{0,0},{0,0}, 0.0f, 10.7f };
+    Texture deathscreen = LoadTexture("assets/img/deathscreen.png");
 
     while (!WindowShouldClose())
     {
@@ -170,7 +171,7 @@ int main() {
         switch(currentScreen){
             case LOGO:{
                 framesCounter++;
-                if (framesCounter > 120){
+                if (framesCounter > 0){
                     currentScreen = TITLE;
                 }
             } break;
@@ -181,7 +182,7 @@ int main() {
                 }
             } break;
             case GAMEPLAY:{
-                if (IsKeyPressed(KEY_ENTER) || IsGestureDetected(GESTURE_TAP)){
+                if (IsKeyPressed(KEY_ENTER)){
                     currentScreen = ENDING;
                 }
             } break;
@@ -243,7 +244,7 @@ int main() {
             .y = player.pos.y + yPos + 4
         };
 
-		if(IsKeyDown(KEY_SPACE)) {
+		if(IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
 			Vector2 shootingPos = {cos(angleToMouse), sin(angleToMouse)};
 			AddBullet(&player, shootingPos);
         }
@@ -293,10 +294,10 @@ int main() {
 
             } break;
             case ENDING:{
-
-                DrawRectangle(0, 0, screenX, screenY, BLUE);
-                DrawText("ENDING SCREEN", 20, 20, 40, DARKBLUE);
-                DrawText("PRESS ENTER or TAP to RETURN to TITLE SCREEN", 120, 220, 20, DARKBLUE);
+                BeginMode2D(camera2);
+                DrawRectangle(0,0,100,100,BLACK);
+                DrawTexture(deathscreen,0,0,WHITE);
+                EndMode2D();
 
             } break;
             default: break;
