@@ -1,5 +1,6 @@
 #include <raylib.h>
 #include "MapHandler.h"
+#include "Bullet.h"
 
 typedef struct {
 	Vector2 pos;
@@ -7,8 +8,15 @@ typedef struct {
 	Vector2 prevPos;
 	Rectangle rect;
 	int animationCount;
-	Sprite sprite;
+	Sprite sprite; 
+	int bulletCount;
+	Bullet bullets[50];
+	int reloadCount;
 } Player;
+
+void UpdateBullets(Sprite sprite, Player* player);
+
+void AddBullet(Player* player, Vector2 dir);
 
 void CheckPlayerCollisions(Player* player, MapHandler mapHandler);
 

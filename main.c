@@ -20,11 +20,6 @@ int main() {
     Texture map = LoadTexture("assets/map.png");
     Texture gun = LoadTexture("assets/img/player/Gun.png");
 
-	MapObject paredObj = {
-		.texture = LoadTexture("assets/img/Pared.png"),
-		.rect = {255, 240, 80, 16}
-	};
-	AddMapObject(&mapHandler, paredObj);
     MapObject Bordesup = {
             .texture = LoadTexture("assets/img/bordesup.png"),
             .rect = {0, 0, 512, 16}
@@ -138,7 +133,8 @@ int main() {
 		.pos = {256, 256},
 		.acceleration = {0, 0},
 		.rect = {256, 256, 16, 16},
-		.sprite = CreateSprite("assets/img/player/sussprites.png", 16)
+		.sprite = CreateSprite("assets/img/player/sussprites.png", 16),
+		.reloadCount = 0
 	};
 
 	Sprite bullet = CreateSprite("assets/img/Bullet.png", 8);
@@ -239,7 +235,6 @@ int main() {
             .y = 8
         };
         double angleToMouse = Vector2Angle(Vector2Add(player.pos, origin), mouseWorldPos);
-		Vector2 shootingPos = {cos(angleToMouse), sin(angleToMouse)};
 
         float xPos = 20 * cos(angleToMouse);
         float yPos = 20 * sin(angleToMouse);
@@ -248,6 +243,13 @@ int main() {
             .y = player.pos.y + yPos + 4
         };
 
+		if(IsKeyDown(KEY_SPACE)) {
+			Vector2 shootingPos = {cos(angleToMouse), sin(angleToMouse)};
+			AddBullet(&player, shootingPos);
+        }
+		if(IsKeyDown(KEY_I)) {
+			printf("%f, %f\n", player.pos.x, player.pos.y);
+		}
 
         BeginDrawing();
         ClearBackground(WHITE);
@@ -277,8 +279,8 @@ int main() {
                 DrawTextureEx(gun, gunPos, 0, 1, WHITE);
                 DrawCollisionsGrid();
                 DrawTextureRec(player.sprite.texture, player.sprite.mask, player.pos, WHITE);
+				UpdateBullets(bullet, &player);
                 DrawEnemies(&game);
-                DrawTexture(paredObj.texture, 255, 240, WHITE);
 
                 DrawTextureV(map,mappos,WHITE);
                 DrawTexture(Bordesup.texture, 0, 0, WHITE);

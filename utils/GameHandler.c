@@ -53,6 +53,13 @@ void UpdateEnemy(Enemy* enemy, GameHandler* game, MapHandler* mapHandler) {
 	enemy->rect.x = enemy->pos.x;
 	enemy->rect.y = enemy->pos.y;
 
+	for(int i = 0; i < game->player->bulletCount; i++) {
+		if(enemy->isAlive != 0 && CheckCollisionRecs(enemy->rect, game->player->bullets[i].rect)) {
+			enemy->isAlive = 0;
+			game->player->bullets[i].isAlive = 0;
+		}
+	}
+
 	for(int i = 0; i < mapHandler->objectCount; i++) {
 		if(CheckCollisionRecs(enemy->rect, mapHandler->objects[i].rect)) {
 			enemy->pos = enemy->prevPos;
@@ -72,6 +79,7 @@ void UpdateEnemy(Enemy* enemy, GameHandler* game, MapHandler* mapHandler) {
 
 void DrawEnemies(GameHandler* game) {
 	for(int i = 0; i < game->enemiesCount; i++) {
-		DrawTextureRec(game->enemies[i].sprite.texture, game->enemies[i].sprite.mask, game->enemies[i].pos, WHITE);	
+		if(game->enemies[i].isAlive == 1)
+			DrawTextureRec(game->enemies[i].sprite.texture, game->enemies[i].sprite.mask, game->enemies[i].pos, WHITE);	
 	}
 }
