@@ -4,6 +4,7 @@
 #include <raylib.h>
 #include <raymath.h>
 #include <stdio.h>
+#include "SpawnLocation.h"
 
 typedef struct {
 	int curRound;
@@ -12,26 +13,31 @@ typedef struct {
 	Player* player;
 	Sprite sprite;
 	MapHandler* mapHandler;
+	SpawnLocation spawns[4];
 } GameHandler;
 
-void HandleNewRound(GameHandler* game) {
-	int newEnemiesCount = game->curRound * 5 > 50 ? 50 : game->curRound * 5;
-
+void HandleNewRound(GameHandler* game, SpawnLocation spawns[4]) {
+	printf("newround %f, %f\n", spawns[0].pos.x, spawns[0].pos.y);
+	printf("CurRound %i\n", game->curRound);
+	int newEnemiesCount = game->curRound * 4 > 50 ? 50 : game->curRound * 4;
 	game->enemiesCount = newEnemiesCount;
 	printf("Enemy count: %i\n", newEnemiesCount);
-	for(int i = 0; i < newEnemiesCount; i++) {
-		Enemy newEnemy = {
-			.isAlive = 1,
-			.pos = {256, 256},
-			.prevPos = {256, 256},
-			.rect = {256, 256, 16, 16},
-			.sprite = CreateSprite("assets/img/zombie.png", 16)
-		};	
-		game->enemies[i] = newEnemy;
+	for(int i = 0; i < newEnemiesCount; i+=4) {
+		for(int j = 0; j < 4; j++) {
+			printf("Spawning enemy at %f, %f\n", spawns[j].pos.x, spawns[j].pos.y);
+			Enemy newEnemy = {
+				.isAlive = 1,
+				.pos = spawns[j].pos,
+				.prevPos = spawns[j].pos,
+				.rect = {spawns[j].pos.x, spawns[j].pos.y, 16, 16},
+				.sprite = CreateSprite("assets/img/zombie.png", 16)
+			};	
+			game->enemies[i+j] = newEnemy;
+		}
 	}
 }
 
-void CheckEnemies(GameHandler* game) {
+void CheckEnemies(GameHandler* game, SpawnLocation spawns[4]) {
 	int isAnyAlive = 0;
 	for(int i = 0; i < game->enemiesCount; i++) {
 		if(game->enemies[i].isAlive == 1) {
@@ -41,8 +47,9 @@ void CheckEnemies(GameHandler* game) {
 	if(isAnyAlive == 1) {
 		
 	} else {
+		printf("No enemies left\n");
 		game->curRound++;
-		HandleNewRound(game);
+		HandleNewRound(game, spawns);
 	}
 }
 

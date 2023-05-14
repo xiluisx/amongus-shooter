@@ -139,14 +139,24 @@ int main() {
 
 	Sprite bullet = CreateSprite("assets/img/Bullet.png", 8);
 
+	SpawnLocation s1 = {{118,300}};
+	SpawnLocation s2 = {{248,104}};
+	SpawnLocation s3 = {{248,383}};
+	SpawnLocation s4 = {{414,293}};
+
+	SpawnLocation spawns[4] = {s1,s2,s3,s4};
+	printf("s1 = %f, %f\n", s1.pos.x, s1.pos.y);
 	GameHandler game = {
 		.curRound = 1,
 		.enemiesCount = 0,
 		.player	= &player,
-		.mapHandler = &mapHandler
+		.mapHandler = &mapHandler,
+		.spawns = {s1, s2, s3, s4}
 	};
 
-	HandleNewRound(&game);
+	printf("s1game = %f, %f\n", game.spawns[0].pos.x, game.spawns[0].pos.y);
+
+	HandleNewRound(&game, spawns);
 
     Vector2 mappos = {0,0};
     Rectangle gunrect = {8,8,8,8};
@@ -251,6 +261,8 @@ int main() {
 		if(IsKeyDown(KEY_I)) {
 			printf("%f, %f\n", player.pos.x, player.pos.y);
 		}
+
+		CheckEnemies(&game, spawns);
 
         BeginDrawing();
         ClearBackground(WHITE);
