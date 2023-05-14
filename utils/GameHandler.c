@@ -1,4 +1,5 @@
 #include "Enemy.h"
+#include "MapHandler.h"
 #include "Player.h"
 #include <raylib.h>
 #include <raymath.h>
@@ -10,6 +11,7 @@ typedef struct {
 	int enemiesCount;
 	Player* player;
 	Sprite sprite;
+	MapHandler* mapHandler;
 } GameHandler;
 
 void HandleNewRound(GameHandler* game) {
@@ -21,6 +23,7 @@ void HandleNewRound(GameHandler* game) {
 		Enemy newEnemy = {
 			.isAlive = 1,
 			.pos = {256, 256},
+			.prevPos = {256, 256},
 			.rect = {256, 256, 16, 16},
 			.sprite = CreateSprite("assets/img/zombie.png", 16)
 		};	
@@ -43,10 +46,19 @@ void CheckEnemies(GameHandler* game) {
 	}
 }
 
-void UpdateEnemy(Enemy* enemy, GameHandler* game) {
-	enemy->pos = Vector2MoveTowards(enemy->pos, game->player->pos, 1);
+void UpdateEnemy(Enemy* enemy, GameHandler* game, MapHandler* mapHandler) {
+	enemy->prevPos = enemy->pos;
+	enemy->pos = Vector2MoveTowards(enemy->pos, game->player->pos, .5);
+
 	enemy->rect.x = enemy->pos.x;
 	enemy->rect.y = enemy->pos.y;
+
+	for(int i = 0; i < mapHandler->objectCount; i++) {
+		if(CheckCollisionRecs(enemy->rect, mapHandler->objects[i].rect)) {
+			enemy->pos = enemy->prevPos;
+		}
+	}
+
 	enemy->animationCount++;
 	if(enemy->animationCount % 4 == 0) {
 		enemy->sprite.curStep++;
