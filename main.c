@@ -146,7 +146,8 @@ int main() {
 	GameHandler game = {
 		.curRound = 1,
 		.enemiesCount = 0,
-		.player	= &player
+		.player	= &player,
+		.mapHandler = &mapHandler
 	};
 
 	HandleNewRound(&game);
@@ -230,7 +231,7 @@ int main() {
 
 		UpdatePlayer(&player, mapHandler);
 		for(int i = 0; i < game.enemiesCount; i++) {
-			UpdateEnemy(&game.enemies[i], &game);
+			UpdateEnemy(&game.enemies[i], &game, &mapHandler);
 		}
 
 		Vector2 origin = {
