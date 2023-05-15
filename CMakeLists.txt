@@ -1,7 +1,8 @@
-cmake_minimum_required(VERSION 3.25)
-project(amongus_shooter C)
+cmake_minimum_required(VERSION 3.0)
+project(my_raylib_game C)
+set(CMAKE_C_STANDARD 99)
 
-set(CMAKE_C_STANDARD 11)
+# Adding Raylib
 set(RAYLIB_VERSION 4.2.0)
 find_package(raylib ${RAYLIB_VERSION} QUIET) # QUIET or REQUIRED
 if (NOT raylib_FOUND) # If there's none, fetch and build raylib
@@ -19,24 +20,15 @@ if (NOT raylib_FOUND) # If there's none, fetch and build raylib
     endif()
 endif()
 
-#include_directories(utils)
+# Adding our source files
+file(GLOB_RECURSE PROJECT_SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_LIST_DIR}/utils/*.c") # Define PROJECT_SOURCES as a list of all source files
+# set(PROJECT_INCLUDE "${CMAKE_CURRENT_LIST_DIR}/sources/") # Define PROJECT_INCLUDE to be the path to the include directory of the project
 
-add_executable(amongus_shooter
-        utils/aMapObject.c
-        utils/aMapObject.h
-        utils/CollisionsHandler.c
-        utils/CollisionsHandler.h
-        utils/Enemy.c
-        utils/Enemy.h
-        utils/GameHandler.c
-        utils/GameHandler.h
-        utils/MapHandler.c
-        utils/MapHandler.h
-        utils/Player.c
-        utils/Player.h
-        utils/Sprite.c
-        utils/Sprite.h
-        AssetHandler.c
-        main.c
-        test.c)
-link_libraries(${PROJECT_NAME},raylib)
+# Declaring our executable
+add_executable(${PROJECT_NAME} main.c )
+target_sources(${PROJECT_NAME} PRIVATE ${PROJECT_SOURCES})
+target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_INCLUDE})
+target_link_libraries(${PROJECT_NAME} PRIVATE raylib)
+
+# Setting ASSETS_PATH
+target_compile_definitions(${PROJECT_NAME} PUBLIC ASSETS_PATH="${CMAKE_CURRENT_SOURCE_DIR}/assets/") # Set the asset path macro to the absolute path on the dev machine
