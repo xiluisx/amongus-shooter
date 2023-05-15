@@ -175,6 +175,12 @@ int main() {
     Texture deathscreen = LoadTexture("assets/img/deathscreen.png");
     int Vida = 3;
 
+    MapObject vidas = {
+            .texture = LoadTexture("assets/img/corazones.png"),
+            .rect = {0, 0, 23, 6}
+    };
+    Rectangle vidaGrande = {0,0,230,60};
+
     while (!WindowShouldClose())
     {
         Vector2 mouseWorldPos = GetScreenToWorld2D(GetMousePosition(), camera);
@@ -317,6 +323,14 @@ int main() {
 
 
                 EndMode2D();
+                DrawTextureRec(vidas.texture,vidas.rect, mappos, WHITE);
+                if(Vida == 2){
+                    vidas.rect.y=6;
+                }
+                if(Vida == 1){
+                    vidas.rect.y=12;
+                }
+                DrawTexturePro(vidas.texture,vidas.rect,vidaGrande,mappos,0,WHITE);
                 DrawFPS(10,10);
 
             } break;
