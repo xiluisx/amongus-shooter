@@ -198,7 +198,7 @@ int main() {
                 }
             } break;
             case ENDING:{
-                if (IsKeyPressed(KEY_ENTER) || IsGestureDetected(GESTURE_TAP)){
+                if (IsKeyPressed(KEY_ENTER)){
                     currentScreen = TITLE;
                 }
             } break;
@@ -271,6 +271,7 @@ int main() {
             if(collision){
                 Vida -= 1;
                 game.enemies[i].pos.x = 512;
+                game.enemies[i].isAlive = false;
                 break;
             }
         }
