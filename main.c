@@ -173,6 +173,7 @@ int main() {
     Texture menubg = LoadTexture("assets/img/menubg.png");
     Camera2D camera2 = {{0,0},{0,0}, 0.0f, 10.7f };
     Texture deathscreen = LoadTexture("assets/img/deathscreen.png");
+    int Vida = 3;
 
     while (!WindowShouldClose())
     {
@@ -192,7 +193,7 @@ int main() {
                 }
             } break;
             case GAMEPLAY:{
-                if (IsKeyPressed(KEY_ENTER)){
+                if (IsKeyPressed(KEY_ENTER)||Vida < 1){
                     currentScreen = ENDING;
                 }
             } break;
@@ -260,9 +261,20 @@ int main() {
         }
 		if(IsKeyDown(KEY_I)) {
 			printf("%f, %f\n", player.pos.x, player.pos.y);
+            printf("%d,\n", Vida);
 		}
 
 		CheckEnemies(&game, spawns);
+
+        for(int i=0;i<50;i++){
+            int collision = CheckCollisionRecs(player.rect, game.enemies[i].rect );
+            if(collision){
+                Vida -= 1;
+                game.enemies[i].pos.x = 512;
+                break;
+            }
+        }
+
 
         BeginDrawing();
         ClearBackground(WHITE);
@@ -301,6 +313,8 @@ int main() {
                 DrawTextureRec(Bordeinf.texture,Bordeinf.rect, vordinf, WHITE);
                 DrawTextureRec(Borderecho.texture,Borderecho.rect, vorderecho, WHITE);
                 Bordeinf.rect.height = -16;
+
+
                 EndMode2D();
                 DrawFPS(10,10);
 
