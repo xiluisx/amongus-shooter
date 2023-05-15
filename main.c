@@ -154,8 +154,6 @@ int main() {
 		.spawns = {s1, s2, s3, s4}
 	};
 
-	printf("s1game = %f, %f\n", game.spawns[0].pos.x, game.spawns[0].pos.y);
-
 	HandleNewRound(&game, spawns);
 
     Vector2 mappos = {0,0};
@@ -265,19 +263,15 @@ int main() {
 			Vector2 shootingPos = {cos(angleToMouse), sin(angleToMouse)};
 			AddBullet(&player, shootingPos);
         }
-		if(IsKeyDown(KEY_I)) {
-			printf("%f, %f\n", player.pos.x, player.pos.y);
-            printf("%d,\n", Vida);
-		}
 
 		CheckEnemies(&game, spawns);
 
         for(int i=0;i<50;i++){
+			if(game.enemies[i].isAlive != 1) continue;
             int collision = CheckCollisionRecs(player.rect, game.enemies[i].rect );
             if(collision){
                 Vida -= 1;
-                game.enemies[i].pos.x = 512;
-                game.enemies[i].isAlive = false;
+				game.enemies[i].isAlive = 0;
                 break;
             }
         }
